@@ -13,8 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 // 1. Serve Admin Panel Static Files (Root)
-app.use(express.static(path.join(__dirname, 'admin')));
-
+app.use(express.static(path.join(__dirname, 'admin'), {index: 'admin.html'}));
 // 2. Allow Admin to access 'public' folder (for Logo)
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
@@ -63,7 +62,7 @@ app.delete('/api/admin/data/:id', async (req, res) => {
 
 // Fallback: Send index.html for any unknown routes
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'admin', 'index.html'));
+    res.sendFile(path.join(__dirname, 'admin', 'admin.html'));
 });
 
 app.listen(PORT, () => {
