@@ -6,18 +6,17 @@ const path = require('path');
 const Submission = require('./models/Submission');
 
 const app = express();
-// Use a different port if running locally (e.g., 5001), or let host assign PORT
 const PORT = process.env.ADMIN_PORT || 5001;
 
 // --- MIDDLEWARE ---
 app.use(cors());
 app.use(express.json());
 
-// Serve ONLY Admin Panel
-// We serve it at the ROOT path (/) since this is now a dedicated admin server
-app.use(express.static(path.join(__dirname, 'admin'), {
-    index: 'admin.html'
-}));
+// 1. Serve Admin Panel Static Files (Root)
+app.use(express.static(path.join(__dirname, 'admin')));
+
+// 2. Allow Admin to access 'public' folder (for Logo)
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // --- DATABASE CONNECTION ---
 mongoose.connect(process.env.MONGODB_URI)
@@ -62,9 +61,9 @@ app.delete('/api/admin/data/:id', async (req, res) => {
     }
 });
 
-// Fallback for Admin routing
+// Fallback: Send index.html for any unknown routes
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'admin', 'admin.html'));
+    res.sendFile(path.join(__dirname, 'admin', 'index.html'));
 });
 
 app.listen(PORT, () => {

