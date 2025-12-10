@@ -64,7 +64,7 @@ app.delete('/api/admin/data/:id', async (req, res) => {
 
 // Fallback for Admin routing
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'admin_panel', 'admin.html'));
+    res.sendFile(path.join(__dirname, 'admin', 'admin.html'));
 });
 
 app.listen(PORT, () => {
