@@ -15,7 +15,7 @@ app.use(express.json());
 
 // Serve ONLY Admin Panel
 // We serve it at the ROOT path (/) since this is now a dedicated admin server
-app.use(express.static(path.join(__dirname, 'admin_panel'), {
+app.use(express.static(path.join(__dirname, 'admin'), {
     index: 'admin.html'
 }));
 
