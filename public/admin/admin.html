@@ -267,7 +267,7 @@
 <!-- === LOGIN VIEW === -->
 <div id="login-section" class="admin-container">
     <div class="login-card">
-        <img src="/public/logo.png" onerror="this.src='https://via.placeholder.com/60?text=Logo'" alt="Logo" style="width: 60px; margin-bottom: 15px;">
+        <img src="../logo.png" onerror="this.src='https://via.placeholder.com/60?text=Logo'" alt="Logo" style="width: 60px; margin-bottom: 15px;">
         <h2 style="margin: 0 0 20px 0;">Admin Access</h2>
         <input type="password" id="masterPass" class="login-input" placeholder="Enter Master Password">
         <button class="btn btn-primary" style="width: 100%; padding: 12px;" onclick="handleLogin()">Login to Dashboard</button>
@@ -281,7 +281,7 @@
     <!-- Header -->
     <header class="app-header">
         <div class="brand-section">
-            <img src="/public/logo.png" onerror="this.src='https://via.placeholder.com/50?text=Logo'" alt="Logo" class="logo-img">
+            <img src="../logo.png" onerror="this.src='https://via.placeholder.com/50?text=Logo'" alt="Logo" class="logo-img">
             <h1 class="brand-title">TopPay Admin</h1>
         </div>
         <div class="header-actions">
@@ -343,6 +343,8 @@
 </div>
 
 <script>
+
+    const BACKEND_URL = 'https://toppay-customer-service.vercel.app/'; // Use relative path for API calls
     let token = sessionStorage.getItem('adminAuthToken');
     let autoRefreshInterval;
     let allData = []; // Store data locally for search filtering
