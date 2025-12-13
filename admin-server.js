@@ -61,8 +61,12 @@ app.delete('/api/admin/data/:id', async (req, res) => {
 });
 
 // Fallback: Send index.html for any unknown routes
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'admin', 'admin.html'));
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'admin', 'admin.html'));
+// });
+
+app.get(/(.*)/, (req, res) => {
+    res.sendFile(path.join(__dirname, 'admin_panel', 'index.html'));
 });
 
 app.listen(PORT, () => {

