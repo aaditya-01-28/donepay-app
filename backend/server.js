@@ -2,76 +2,120 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const Submission = require('./models/Submission'); // Ensure you have the models/Submission.js file we created earlier
+const Submission = require('./models/Submission');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// --- MIDDLEWARE ---
-// Allow CORS from ANY origin so Netlify can talk to Vercel
-app.use(cors()); 
+/* ===========================
+   MIDDLEWARE
+=========================== */
+app.use(cors());
 app.use(express.json());
 
-// --- DATABASE CONNECTION ---
-// Note: We check if connection exists to prevent multiple connections in serverless environment
-if (mongoose.connection.readyState === 0) {
-    mongoose.connect(process.env.MONGODB_URI)
-      .then(() => console.log('✅ Connected to MongoDB'))
-      .catch(err => console.error('❌ DB Error:', err));
+/* ===========================
+   MONGODB CONNECTION (VERCEL SAFE)
+=========================== */
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
 }
 
-// --- ROUTES ---
+async function connectDB() {
+  if (cached.conn) return cached.conn;
 
-// 1. User Submission
+  if (!cached.promise) {
+    cached.promise = mongoose
+      .connect(process.env.MONGODB_URI, {
+        bufferCommands: false,
+      })
+      .then((mongoose) => mongoose);
+  }
+
+  cached.conn = await cached.promise;
+  return cached.conn;
+}
+
+/* ===========================
+   ROUTES
+=========================== */
+
+// 1️⃣ User Submission
 app.post('/api/submit', async (req, res) => {
   try {
+    await connectDB();
+
     const newSubmission = new Submission(req.body);
     await newSubmission.save();
+
     res.status(201).json({ message: 'Saved successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    console.error('Submission Error:', error);
+    res.status(500).json({ error: error.message });
   }
 });
 
-// 2. Admin Login
+// 2️⃣ Admin Login
 app.post('/api/admin/login', (req, res) => {
-    const { password } = req.body;
-    if (password === process.env.ADMIN_MASTER_PASSWORD) {
-        res.json({ success: true, token: "ADMIN_ACCESS_GRANTED" });
-    } else {
-        res.status(401).json({ success: false, error: 'Invalid Password' });
-    }
+  const { password } = req.body;
+
+  if (password === process.env.ADMIN_MASTER_PASSWORD) {
+    res.json({ success: true, token: 'ADMIN_ACCESS_GRANTED' });
+  } else {
+    res.status(401).json({ success: false, error: 'Invalid Password' });
+  }
 });
 
-// 3. Get Data (Admin)
+// 3️⃣ Get All Submissions (Admin)
 app.get('/api/admin/data', async (req, res) => {
-    if(req.headers['auth-token'] !== "ADMIN_ACCESS_GRANTED") return res.status(401).json({ error: "Unauthorized" });
-    try {
-        const data = await Submission.find().sort({ timestamp: -1 });
-        res.json(data);
-    } catch (e) {
-        res.status(500).json({ error: "Error fetching" });
-    }
+  if (req.headers['auth-token'] !== 'ADMIN_ACCESS_GRANTED') {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  try {
+    await connectDB();
+
+    const data = await Submission.find().sort({ timestamp: -1 });
+    res.json(Array.isArray(data) ? data : []);
+  } catch (error) {
+    console.error('Fetch Error:', error);
+    res.status(500).json([]);
+  }
 });
 
-// 4. Delete Data (Admin)
+// 4️⃣ Delete Submission (Admin)
 app.delete('/api/admin/data/:id', async (req, res) => {
-    if(req.headers['auth-token'] !== "ADMIN_ACCESS_GRANTED") return res.status(401).json({ error: "Unauthorized" });
-    try {
-        await Submission.findByIdAndDelete(req.params.id);
-        res.json({ success: true });
-    } catch (e) {
-        res.status(500).json({ error: "Error deleting" });
-    }
+  if (req.headers['auth-token'] !== 'ADMIN_ACCESS_GRANTED') {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  try {
+    await connectDB();
+
+    await Submission.findByIdAndDelete(req.params.id);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Delete Error:', error);
+    res.status(500).json({ error: 'Error deleting' });
+  }
 });
 
-// Root route for testing
-app.get('/', (req, res) => res.send("DonePay Backend is Running!"));
+// Root test route
+app.get('/', (req, res) => {
+  res.send('TopPay Backend is Running');
+});
 
-// --- VERCEL EXPORT ---
+/* ===========================
+   EXPORT FOR VERCEL
+=========================== */
 module.exports = app;
 
-// Local Start (Only runs if not on Vercel)
+/* ===========================
+   LOCAL DEVELOPMENT ONLY
+=========================== */
 if (require.main === module) {
-    app.listen(PORT, () => console.log(`🚀 Server running locally on port ${PORT}`));
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running locally on port ${PORT}`);
+  });
 }
