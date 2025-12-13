@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-const Submission = require('./models/Submission');
+const Submission = require('./backend/models/Submission');
 
 const app = express();
 const PORT = process.env.ADMIN_PORT || 5001;
